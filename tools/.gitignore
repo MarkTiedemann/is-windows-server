@@ -1,5 +1,8 @@
 *.exe
+*.msi
 *.zip
 node-addon-api
 node-gyp
 npm
+python
+msvs
