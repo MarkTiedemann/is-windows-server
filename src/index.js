@@ -1,5 +1,2 @@
-switch (process.arch) {
-  case "x64": return console.log(require('./addon_x64.node'))
-  case "ia32": return console.log(require('./addon_ia32.node'))
-  default: throw new Error(`unsupported architecture '${process.arch}'`)
-}
+// module.exports = require(`./addon_napi_v${process.versions.napi}_${process.arch}.node`).isServer
+module.exports = require(`./addon_${process.arch}.node`).isServer

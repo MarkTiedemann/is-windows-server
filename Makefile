@@ -1,13 +1,16 @@
-.PHONY: all clean
+.PHONY: all tools src test clean
 SHELL := cmd.exe
 
 all: tools src
 
 tools:
-	$(MAKE) -C $@
+	$(MAKE) -C $@ -j4
 src: tools
 	$(MAKE) -C $@
 
+test:
+	@$(MAKE) -C src test
+
 clean:
-	$(MAKE) -C tools clean
-	$(MAKE) -C src clean
+	@$(MAKE) -sC tools clean
+	@$(MAKE) -sC src clean
