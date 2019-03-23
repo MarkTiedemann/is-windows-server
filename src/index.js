@@ -33,9 +33,10 @@ var napi_version = (function() {
   throw new Error("node " + process.version + " does not support N-API");
 })();
 
-var addon = path.join(
-  __dirname,
-  "addon_napi_v" + napi_version + "_" + process.arch + ".node"
-);
+var addon = "addon_napi_v" + napi_version + "_" + process.arch + ".node";
+var addon_path = path.join(__dirname, addon);
 
-module.exports = require(addon).isServer;
+var is_server =
+  process.platform == "win32" ? require(addon_path).isServer : false;
+
+module.exports = is_server;
