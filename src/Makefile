@@ -3,7 +3,7 @@ SHELL := cmd.exe
 
 NODE_VERSIONS := 6 8 9 10 11
 NODE_ARCHS := ia32 x64
-NAPI_VERSIONS := 3 4
+NAPI_VERSIONS := 1 2 3 4
 MSVS_VERSION := 2017
 
 NODE_GYP := ..\tools\node-gyp\bin\node-gyp.js
