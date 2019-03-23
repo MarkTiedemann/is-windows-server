@@ -1,6 +1,6 @@
 var path = require("path");
 
-var napi_version = (function() {
+var napiVersion = (function() {
   // https://nodejs.org/docs/latest/api/n-api.html#n_api_n_api_version_matrix
 
   // N-API 4
@@ -33,10 +33,10 @@ var napi_version = (function() {
   throw new Error("node " + process.version + " does not support N-API");
 })();
 
-var addon = "addon_napi_v" + napi_version + "_" + process.arch + ".node";
-var addon_path = path.join(__dirname, addon);
+var addon = "addon_napi_v" + napiVersion + "_" + process.arch + ".node";
+var addonPath = path.join(__dirname, addon);
 
-var is_server =
-  process.platform == "win32" ? require(addon_path).isServer : false;
+var isServer =
+  process.platform == "win32" ? require(addonPath).isServer : false;
 
-module.exports = is_server;
+module.exports = isServer;
