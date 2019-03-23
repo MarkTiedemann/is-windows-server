@@ -1,40 +1,39 @@
 .PHONY: all test clean
 SHELL := cmd.exe
 
-NODE_VERSIONS := 8 9 10 11
+NODE_VERSIONS := 6 8 9 10 11
 NODE_ARCHS := ia32 x64
-
-NODE_LATEST_ia32 := ..\tools\node_v11_ia32.exe
-NODE_LATEST_x64 := ..\tools\node_v11_x64.exe
+NAPI_VERSIONS := 3 4
 
 NODE_GYP := ..\tools\node-gyp\bin\node-gyp.js
 
-target_files := \
-	addon_x64.node addon_ia32.node
-target_dirs := \
-	build_x64 build_ia32
+target_files := $(foreach node_arch,$(NODE_ARCHS),$(foreach napi_version,$(NAPI_VERSIONS),addon_napi_v$(napi_version)_$(node_arch).node ))
+target_dirs := $(foreach arch,$(NODE_ARCHS),build_$(arch) )
 
 all: $(target_files) $(target_dirs)
 
-build_x64: addon.cc binding.gyp $(NODE_LATEST_x64) $(NODE_GYP)
-	$(NODE_LATEST_x64) $(NODE_GYP) configure
-	$(NODE_LATEST_x64) $(NODE_GYP) build
-	move /y build $@
-build_ia32: addon.cc binding.gyp $(NODE_LATEST_ia32) $(NODE_GYP)
-	$(NODE_LATEST_ia32) $(NODE_GYP) configure
-	$(NODE_LATEST_ia32) $(NODE_GYP) build
-	move /y build $@
+define build_arch
+build_$(1): addon.cc binding.gyp ..\tools\node_v11_$(1).exe $(NODE_GYP)
+	..\tools\node_v11_$(1).exe $(NODE_GYP) configure
+	..\tools\node_v11_$(1).exe $(NODE_GYP) build
+	move /y build $$@
+endef
+
+$(foreach arch,$(NODE_ARCHS),$(eval $(call build_arch,$(arch))))
 
 touch := -e "now = new Date(); fs.utimesSync(process.argv[1], now, now)"
 
-addon_x64.node: build_x64 index.js $(NODE_LATEST_x64)
-	copy /y build_x64\Release\addon.node $@
-	$(NODE_LATEST_x64) $(touch) $@
-addon_ia32.node: build_ia32 index.js $(NODE_LATEST_ia32)
-	copy /y build_ia32\Release\addon.node $@
-	$(NODE_LATEST_ia32) $(touch) $@
+define copy_version_arch
+addon_napi_v$(1)_$(2).node: build_$(2)
+	copy /y build_$(2)\Release\addon_napi_v$(1).node $$@
+	..\tools\node_v11_$(2).exe $(touch) $$@
+endef
 
-define test_node_version_arch
+$(foreach napi_version,$(NAPI_VERSIONS),\
+$(foreach node_arch,$(NODE_ARCHS),\
+$(eval $(call copy_version_arch,$(napi_version),$(node_arch)))))
+
+define test_version_arch
 ..\tools\node_v$(1)_$(2).exe --no-warnings -e "process.exitCode = require('./') ? 1 : 0"
 
 endef
@@ -42,7 +41,7 @@ endef
 test:
 	$(foreach version,$(NODE_VERSIONS),\
 	$(foreach arch,$(NODE_ARCHS),\
-	$(call test_node_version_arch,$(version),$(arch))))
+	$(call test_version_arch,$(version),$(arch))))
 
 clean:
 	@del /q /f $(target_files) 2> nul || true

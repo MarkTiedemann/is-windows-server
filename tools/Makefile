@@ -2,7 +2,7 @@
 .ONESHELL:
 SHELL := cmd.exe
 
-NODE_VERSIONS := 6 7 8 9 10 11
+NODE_VERSIONS := 6 8 9 10 11
 NODE_ARCHS := ia32 x64
 
 NODE_ADDON_API_VERSION := 1.6.2
@@ -20,14 +20,14 @@ iwr := powershell -c $(enable_tls12) Invoke-WebRequest
 
 all: $(target_files) $(target_dirs)
 
-define download_node_version_arch
+define download_version_arch
 node_v$(1)_$(2).exe:
 	$(iwr) https://nodejs.org/dist/latest-v$(1).x/win-$(if $(findstring ia32,$(2)),x86,x64)/node.exe -out $$@
 endef
 
 $(foreach version,$(NODE_VERSIONS),\
 $(foreach arch,$(NODE_ARCHS),\
-$(eval $(call download_node_version_arch,$(version),$(arch)))))
+$(eval $(call download_version_arch,$(version),$(arch)))))
 
 node-addon-api.zip:
 	$(iwr) https://github.com/nodejs/node-addon-api/archive/$(NODE_ADDON_API_VERSION).zip -out $@
