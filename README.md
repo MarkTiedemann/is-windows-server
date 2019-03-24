@@ -1,31 +1,37 @@
-# is-windows-server-node-native-addon
+# is-windows-server
 
-**Node native addon to check whether you are running on a Windows server or desktop.**
+**Check whether you are running on a Windows server or client.**
 
 ## Installation
 
-```batch
-:: TODO: Publish package on NPM
-npm install is-windows-server-node-native-addon
+```sh
+# TODO: Setup CI and publish package on npm
+npm install is-windows-server
 ```
 
 ## Quickstart
 
 ```js
-const isWindowsServer = require("is-windows-server-node-native-addon");
+var isServer = require("is-windows-server");
 
-// On a Windows Server
-isWindowsServer; // => true
+// On a Windows server
+isServer; // => true
 
-// On a Windows Desktop
-isWindowsServer; // => false
+// On a Windows client
+isServer; // => false
+
+// On Linux or Mac
+isServer; // => false
+
+// If the detection failed
+isServer; // => null
 ```
 
-## Compatibility
+## Features
 
-- Node versions: `6`, `8-11+`
-- Node arch: `ia32`, `x64`
-- N-API versions: `1-4+`
+- Tested on Node v4-11 (x64, ia32)
+- Uses prebuilt N-API modules (v1-4) for optimal performance
+- Multiple fallbacks to `reg` and `wmic` queries
 
 ## Development
 

@@ -3,7 +3,7 @@
 SHELL := cmd.exe
 CURDIR := $(shell echo %cd%)
 
-NODE_VERSIONS := 6 8 9 10 11
+NODE_VERSIONS := 4 5 6 7 8 9 10 11
 NODE_ARCHS := ia32 x64
 
 NODE_ADDON_API_VERSION := 1.6.2
@@ -19,44 +19,46 @@ target_dirs := \
 	node-addon-api node-gyp npm node-gyp\node_modules python msvs
 
 enable_tls12 := [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;
-iwr := powershell -c $(enable_tls12) Invoke-WebRequest
 
 all: $(target_files) $(target_dirs)
 
 define download_version_arch
 node_v$(1)_$(2).exe:
-	$(iwr) https://nodejs.org/dist/latest-v$(1).x/win-$(if $(findstring ia32,$(2)),x86,x64)/node.exe -out $$@
+	powershell -c "$$$$ProgressPreference = 'SilentlyContinue'; $(enable_tls12) Invoke-WebRequest https://nodejs.org/dist/latest-v$(1).x/win-$(if $(findstring ia32,$(2)),x86,x64)/node.exe -out $$@"
 endef
 
 $(foreach version,$(NODE_VERSIONS),\
 $(foreach arch,$(NODE_ARCHS),\
 $(eval $(call download_version_arch,$(version),$(arch)))))
 
-node-addon-api.zip:
-	$(iwr) https://github.com/nodejs/node-addon-api/archive/$(NODE_ADDON_API_VERSION).zip -out $@
-node-gyp.zip:
-	$(iwr) https://github.com/nodejs/node-gyp/archive/v$(NODE_GYP_VERSION).zip -out $@
-npm.zip:
-	$(iwr) https://github.com/npm/cli/archive/v$(NPM_VERSION).zip -out $@
-python.msi:
-	$(iwr) https://www.python.org/ftp/python/$(PYTHON_VERSION)/python-$(PYTHON_VERSION).amd64.msi -out $@
-vs_buildtools.exe:
-	$(iwr) https://aka.ms/vs/$(MSVS_RELEASE)/release/$@ -out $@
+disable_progress := $$ProgressPreference = 'SilentlyContinue';
+iwr := powershell -c "$(disable_progress) $(enable_tls12) Invoke-WebRequest
 
-exp := powershell -c Expand-Archive
+node-addon-api.zip:
+	$(iwr) https://github.com/nodejs/node-addon-api/archive/$(NODE_ADDON_API_VERSION).zip -out $@"
+node-gyp.zip:
+	$(iwr) https://github.com/nodejs/node-gyp/archive/v$(NODE_GYP_VERSION).zip -out $@"
+npm.zip:
+	$(iwr) https://github.com/npm/cli/archive/v$(NPM_VERSION).zip -out $@"
+python.msi:
+	$(iwr) https://www.python.org/ftp/python/$(PYTHON_VERSION)/python-$(PYTHON_VERSION).amd64.msi -out $@"
+vs_buildtools.exe:
+	$(iwr) https://aka.ms/vs/$(MSVS_RELEASE)/release/$@ -out $@"
+
+exp := powershell -c "$(disable_progress) Expand-Archive
 
 node-addon-api: node-addon-api.zip
-	$(exp) $<
+	$(exp) $<"
 	move /y $@\node-addon-api-$(NODE_ADDON_API_VERSION) .
 	rmdir $@
 	move /y node-addon-api-$(NODE_ADDON_API_VERSION) $@
 node-gyp: node-gyp.zip
-	$(exp) $<
+	$(exp) $<"
 	move /y $@\node-gyp-$(NODE_GYP_VERSION) .
 	rmdir $@
 	move /y node-gyp-$(NODE_GYP_VERSION) $@
 npm: npm.zip
-	$(exp) $<
+	$(exp) $<"
 	move /y $@\cli-$(NPM_VERSION) .
 	rmdir $@
 	move /y cli-$(NPM_VERSION) $@

@@ -1,0 +1,36 @@
+{
+  "name": "is-windows-server",
+  "version": "0.0.0",
+  "description": "Check whether you are running on a Windows server or client.",
+  "author": {
+    "name": "Mark Tiedemann",
+    "email": "www.marktiedemann@gmail.com",
+    "url": "https://marksweb.site"
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "engines": {
+    "node": ">=4"
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "src/*.node"
+  ],
+  "keywords": [
+    "win32",
+    "windows",
+    "server",
+    "client",
+    "detection",
+    "napi"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MarkTiedemann/is-windows-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MarkTiedemann/is-windows-server/issues"
+  },
+  "homepage": "https://github.com/MarkTiedemann/is-windows-server"
+}
