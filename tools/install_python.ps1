@@ -5,6 +5,7 @@ if ($LastExitCode -eq 1603) {
   $ErrorActionPreference = 'Stop'
   msiexec.exe /x python.msi /qn "TARGETDIR=${PWD}\python" ALLUSERS=0
   msiexec.exe /i python.msi /qn "TARGETDIR=${PWD}\python" ALLUSERS=0
-} else {
+}
+else {
   $Host.SetShouldExit($LastExitCode)
 }
