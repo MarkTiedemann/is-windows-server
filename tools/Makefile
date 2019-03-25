@@ -15,7 +15,7 @@ target_files := \
 	$(foreach version,$(NODE_VERSIONS),$(foreach arch,$(NODE_ARCHS),node_v$(version)_$(arch).exe )) \
 	node-addon-api.zip node-gyp.zip npm.zip python.msi vs_buildtools.exe
 target_dirs := \
-	node-addon-api node-gyp npm node-gyp\node_modules python msvs
+	node-addon-api node-gyp npm node-gyp\node_modules python msvs msbuild
 
 all: $(target_files) $(target_dirs)
 
@@ -45,24 +45,20 @@ exp := powershell -f expand_archive.ps1
 
 node-addon-api: node-addon-api.zip
 	$(exp) $<
-	move /y $@\node-addon-api-$(NODE_ADDON_API_VERSION) .
-	rmdir $@
 	move /y node-addon-api-$(NODE_ADDON_API_VERSION) $@
 node-gyp: node-gyp.zip
 	$(exp) $<
-	move /y $@\node-gyp-$(NODE_GYP_VERSION) .
-	rmdir $@
 	move /y node-gyp-$(NODE_GYP_VERSION) $@
 npm: npm.zip
 	$(exp) $<
-	move /y $@\cli-$(NPM_VERSION) .
-	rmdir $@
 	move /y cli-$(NPM_VERSION) $@
 
 python: python.msi
 	powershell -f install_python.ps1
 msvs: vs_buildtools.exe
 	powershell -f install_msvs.ps1
+msbuild: msbuild.zip
+	$(exp) $<
 
 touch := -e "now = new Date(); fs.utimesSync(process.argv[1], now, now)"
 

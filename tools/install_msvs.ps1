@@ -1,4 +1,7 @@
 $ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'
+
+<#
 .\vs_buildtools.exe `
   --installPath "${PWD}\msvs" `
   --includeRecommended `
@@ -6,3 +9,8 @@ $ErrorActionPreference = 'Stop'
   --quiet `
   --wait `
   --norestart
+#>
+
+# Compress-Archive msvs\msbuild -Destination msbuild.zip
+
+mkdir.exe msvs

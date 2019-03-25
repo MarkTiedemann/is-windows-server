@@ -7,7 +7,7 @@ MSVS_VERSION := 2017
 
 NODE_GYP := ..\tools\node-gyp\bin\node-gyp.js
 PYTHON := ..\tools\python\python.exe
-MSBUILD := ..\tools\msvs\msbuild\15.0\bin\msbuild.exe
+MSBUILD := ..\tools\msbuild\15.0\bin\msbuild.exe
 
 target_files := $(foreach node_arch,$(NODE_ARCHS),$(foreach napi_version,$(NAPI_VERSIONS),addon_napi_v$(napi_version)_$(node_arch).node ))
 target_dirs := $(foreach arch,$(NODE_ARCHS),build_$(arch) )
