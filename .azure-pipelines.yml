@@ -1,5 +1,9 @@
 pool:
   vmImage: windows-2019
 steps:
+  - checkout: self
+    clean: true
+    lfs: true
+    fetchDepth: 1
   - powershell: .\setup.ps1
   - script: make test

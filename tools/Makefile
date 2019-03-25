@@ -54,13 +54,13 @@ python.msi:
 	curl -fsSLo $@ https://www.python.org/ftp/python/$(PYTHON_VERSION)/python-$(PYTHON_VERSION).amd64.msi
 
 python: python.msi
-	$(pf) .\install_python.ps1
+	powershell -f install_python.ps1
 
 # vs_buildtools.exe:
 #	curl -fsSLo $@ https://aka.ms/vs/$(MSVS_RELEASE)/release/$@
 
 # vs_buildtools: vs_buildtools.exe
-#	$(pf) .\install_vs_buildtools.ps1
+#	powershell -f install_vs_buildtools.ps1
 
 # $(vs_parts): vs_buildtools
 #	7z a vs_buildtools.7z vs_buildtools -v50m
