@@ -62,8 +62,9 @@ npm: npm.zip
 	move /y $@\cli-$(NPM_VERSION) .
 	rmdir $@
 	move /y cli-$(NPM_VERSION) $@
-python: python.msi
-	msiexec /i $< /qn TARGETDIR=$(CURDIR)\$@ ALLUSERS=0
+
+python: python.msi install_python.ps1
+	powershell -f install_python.ps1
 msvs: vs_buildtools.exe
 	$< --installPath $(CURDIR)\$@ --includeRecommended --add Microsoft.VisualStudio.Workload.VCTools --quiet --wait --norestart
 

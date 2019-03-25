@@ -5,4 +5,4 @@ steps:
   - powershell: (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion').InstallationType
   - powershell: (Get-WMIObject Win32_OperatingSystem ProductType).ProductType
   - powershell: Invoke-WebRequest ftp://ftp.equation.com/make/64/make.exe -Out make.exe
-  - script: make
+  - script: .\make.exe
