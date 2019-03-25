@@ -7,7 +7,7 @@ NODE_ARCHS := ia32 x64
 all: tools src
 
 tools:
-	@$(MAKE) -C $@ -j8
+	@$(MAKE) -C $@
 
 src: tools
 	@$(MAKE) -C $@
