@@ -64,6 +64,7 @@ npm: npm.zip
 
 vs_buildtools: $(vs_parts)
 	7z x vs_buildtools.7z.00* -y
+	touch vs_buildtools
 
 node-gyp\node_modules: node_v11_x64.exe node-gyp npm
 	cd node-gyp && \
