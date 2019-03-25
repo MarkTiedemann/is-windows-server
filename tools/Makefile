@@ -10,17 +10,17 @@ NPM_VERSION := 6.9.0
 PYTHON_VERSION := 2.7.16
 MSVS_RELEASE := 15
 
+vs_parts := \
+	vs_buildtools.7z.001 vs_buildtools.7z.002 vs_buildtools.7z.003 vs_buildtools.7z.004
+
 target_files := \
 	$(foreach version,$(NODE_VERSIONS),$(foreach arch,$(NODE_ARCHS),node_v$(version)_$(arch).exe )) \
 	node-addon-api.zip node-gyp.zip npm.zip \
-	python.msi vs_buildtools.zip
+	python.msi $(vs_parts)
 
 target_dirs := \
 	node-addon-api node-gyp npm node-gyp\node_modules \
 	python vs_buildtools
-
-pf := powershell -f
-pc := powershell -c
 
 all: $(target_files) $(target_dirs)
 
@@ -42,13 +42,13 @@ npm.zip:
 
 node-addon-api: node-addon-api.zip
 	7z x $< -y
-	$(pc) mv node-addon-api-$(NODE_ADDON_API_VERSION) $@
+	move /y node-addon-api-$(NODE_ADDON_API_VERSION) $@
 node-gyp: node-gyp.zip
 	7z x $< -y
-	$(pc) mv node-gyp-$(NODE_GYP_VERSION) $@
+	move /y node-gyp-$(NODE_GYP_VERSION) $@
 npm: npm.zip
 	7z x $< -y
-	$(pc) mv cli-$(NPM_VERSION) $@
+	move /y cli-$(NPM_VERSION) $@
 
 python.msi:
 	curl -fsSLo $@ https://www.python.org/ftp/python/$(PYTHON_VERSION)/python-$(PYTHON_VERSION).amd64.msi
@@ -62,17 +62,11 @@ python: python.msi
 # vs_buildtools: vs_buildtools.exe
 #	$(pf) .\install_vs_buildtools.ps1
 
-# vs_buildtools.zip: vs_buildtools
-#	$(pf) .\zip.ps1 $< $@
+# $(vs_parts): vs_buildtools
+#	7z a vs_buildtools.7z vs_buildtools -v50m
 
-# vs_buildtools.zip.8.part: vs_buildtools.zip
-#	$(pf) .\part.ps1 $<
-
-vs_buildtools.zip: vs_buildtools.zip.8.part
-	$(pf) .\unpart.ps1 $@
-
-vs_buildtools: vs_buildtools.zip
-	7z x $< -y
+vs_buildtools: $(vs_parts)
+	7z x vs_buildtools.7z.00* -y
 
 node-gyp\node_modules: node_v11_x64.exe node-gyp npm
 	cd node-gyp && \

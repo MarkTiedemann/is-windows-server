@@ -8,4 +8,4 @@ write-host PSVersion: $PSVersionTable.PSVersion
 if (!(gcm scoop -ea:SilentlyContinue)) {
   iex (new-object Net.WebClient).DownloadString('https://get.scoop.sh') -ea:SilentlyContinue
 }
-scoop install make curl touch
+scoop install make curl touch 7zip
