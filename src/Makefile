@@ -6,7 +6,6 @@ NAPI_VERSIONS := 1 2 3 4
 MSVS_VERSION := 2017
 
 NODE_GYP := ..\tools\node-gyp\bin\node-gyp.js
-PYTHON := ..\tools\python\python.exe
 MSBUILD := ..\tools\vs_buildtools\msbuild\15.0\bin\msbuild.exe
 
 target_files := $(foreach node_arch,$(NODE_ARCHS),$(foreach napi_version,$(NAPI_VERSIONS),addon_napi_v$(napi_version)_$(node_arch).node ))
@@ -16,7 +15,7 @@ all: $(target_files) $(target_dirs)
 
 define build_arch
 build_$(1): addon.cc binding.gyp
-	..\tools\node_v11_$(1).exe $(NODE_GYP) configure --python=$(PYTHON) --msvs_version=$(MSVS_VERSION) --loglevel=warn
+	..\tools\node_v11_$(1).exe $(NODE_GYP) configure --msvs_version=$(MSVS_VERSION) --loglevel=warn
 	rmdir /q /s $$@ 2> nul || true
 	move /y build $$@
 	$(MSBUILD) build_$(1)/binding.sln /p:Configuration=Release;Platform=$(if $(findstring ia32,$(1)),Win32,x64) /clp:Verbosity=minimal /nologo /m

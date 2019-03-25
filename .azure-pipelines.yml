@@ -6,4 +6,13 @@ steps:
     lfs: true
     fetchDepth: 1
   - powershell: .\setup.ps1
+    displayName: Setup dependencies
+  - script: make tools
+    displayName: Install build tools
+  - script: make src
+    displayName: Build addons
   - script: make test
+    displayName: Run tests
+    env:
+      CI: true
+      NODE_NO_WARNINGS: 1

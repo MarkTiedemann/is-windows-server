@@ -7,7 +7,6 @@ NODE_ARCHS := ia32 x64
 NODE_ADDON_API_VERSION := 1.6.2
 NODE_GYP_VERSION := 3.8.0
 NPM_VERSION := 6.9.0
-PYTHON_VERSION := 2.7.16
 MSVS_RELEASE := 15
 
 vs_parts := \
@@ -15,12 +14,10 @@ vs_parts := \
 
 target_files := \
 	$(foreach version,$(NODE_VERSIONS),$(foreach arch,$(NODE_ARCHS),node_v$(version)_$(arch).exe )) \
-	node-addon-api.zip node-gyp.zip npm.zip \
-	python.msi $(vs_parts)
+	node-addon-api.zip node-gyp.zip npm.zip $(vs_parts)
 
 target_dirs := \
-	node-addon-api node-gyp npm node-gyp\node_modules \
-	python vs_buildtools
+	node-addon-api node-gyp npm node-gyp\node_modules vs_buildtools
 
 all: $(target_files) $(target_dirs)
 
@@ -50,17 +47,17 @@ npm: npm.zip
 	7z x $< -y
 	move /y cli-$(NPM_VERSION) $@
 
-python.msi:
-	curl -fsSLo $@ https://www.python.org/ftp/python/$(PYTHON_VERSION)/python-$(PYTHON_VERSION).amd64.msi
-
-python: python.msi
-	powershell -f install_python.ps1
-
 # vs_buildtools.exe:
 #	curl -fsSLo $@ https://aka.ms/vs/$(MSVS_RELEASE)/release/$@
 
 # vs_buildtools: vs_buildtools.exe
-#	powershell -f install_vs_buildtools.ps1
+#	.\vs_buildtools.exe \
+#	--installPath $(shell echo %cd%)\vs_buildtools \
+#	--includeRecommended \
+#	--add Microsoft.VisualStudio.Workload.VCTools \
+#	--quiet \
+#	--wait \
+#	--norestart \
 
 # $(vs_parts): vs_buildtools
 #	7z a vs_buildtools.7z vs_buildtools -v50m
