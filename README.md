@@ -1,5 +1,7 @@
 # is-windows-server
 
+[![Build Status](https://dev.azure.com/mark-tiedemann/is-windows-server/_apis/build/status/MarkTiedemann.is-windows-server)](https://dev.azure.com/mark-tiedemann/is-windows-server/_build)
+
 **Check whether you are running on a Windows server or client.**
 
 ## Installation

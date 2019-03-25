@@ -1,6 +1,6 @@
 pool:
   vmImage: windows-2019
 steps:
-  - powershell: .\print_build_env.ps1
-  - powershell: Invoke-WebRequest ftp://ftp.equation.com/make/64/make.exe -Out make.exe
-  - script: .\make.exe
+  - powershell: .\env.ps1
+  - powershell: iwr ftp://ftp.equation.com/make/64/make.exe -out make.exe
+  - script: .\make.exe test

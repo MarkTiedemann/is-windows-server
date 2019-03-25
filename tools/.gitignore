@@ -1,10 +1,9 @@
 *.exe
 *.msi
 *.zip
-!msbuild.zip
 node-addon-api
 node-gyp
 npm
 python
 msvs
-msbuild
+vs_buildtools

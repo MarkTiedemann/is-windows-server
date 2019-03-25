@@ -13,7 +13,7 @@ src: tools
 	@$(MAKE) -C $@
 
 define test_version_arch
-.\tools\node_v$(1)_$(2).exe -e "process.exitCode = require('./') === Boolean(process.env.CI) ? 0 : 1"
+.\tools\node_v$(1)_$(2).exe test.js
 
 endef
 
