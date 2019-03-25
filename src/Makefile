@@ -27,7 +27,7 @@ $(foreach arch,$(NODE_ARCHS),$(eval $(call build_arch,$(arch))))
 define copy_version_arch
 addon_napi_v$(1)_$(2).node: build_$(2)
 	copy /y build_$(2)\Release\addon_napi_v$(1).node $$@
-	..\tools\node_v11_$(2).exe touch.js $$@
+	touch $$@
 endef
 
 $(foreach napi_version,$(NAPI_VERSIONS),\
