@@ -5,8 +5,6 @@ steps:
     clean: true
     lfs: true
     fetchDepth: 1
-  - powershell: .\setup.ps1
-    displayName: Setup dependencies
   - script: make tools
     displayName: Install build tools
   - script: make src
