@@ -3,8 +3,9 @@ pool:
 steps:
   - checkout: self
     clean: true
-    lfs: true
+    lfs: false
     fetchDepth: 1
+    submodules: false
   - script: make tools
     displayName: Install build tools
   - script: make src

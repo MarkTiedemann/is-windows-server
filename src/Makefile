@@ -3,10 +3,11 @@ SHELL := cmd.exe
 
 NODE_ARCHS := ia32 x64
 NAPI_VERSIONS := 1 2 3 4
-MSVS_VERSION := 2017
 
 NODE_GYP := ..\tools\node-gyp\bin\node-gyp.js
-MSBUILD := ..\tools\vs_buildtools\msbuild\15.0\bin\msbuild.exe
+MSBUILD_LOCAL := "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\MSBuild.exe"
+MSBUILD_CI := "C:\Program Files (x86)\Microsoft Visual Studio\2019\Preview\MSBuild\15.0\bin\MSBuild.exe"
+MSBUILD := $(if $(CI),$(MSBUILD_CI),$(MSBUILD_LOCAL))
 
 target_files := $(foreach node_arch,$(NODE_ARCHS),$(foreach napi_version,$(NAPI_VERSIONS),addon_napi_v$(napi_version)_$(node_arch).node ))
 target_dirs := $(foreach arch,$(NODE_ARCHS),build_$(arch) )
@@ -15,7 +16,7 @@ all: $(target_files) $(target_dirs)
 
 define build_arch
 build_$(1): addon.cc binding.gyp
-	..\tools\node_v11_$(1).exe $(NODE_GYP) configure --msvs_version=$(MSVS_VERSION) --loglevel=warn
+	..\tools\node_v11_$(1).exe $(NODE_GYP) configure 2>&1
 	rmdir /q /s $$@ 2> nul || true
 	move /y build $$@
 	$(MSBUILD) build_$(1)/binding.sln /p:Configuration=Release;Platform=$(if $(findstring ia32,$(1)),Win32,x64) /clp:Verbosity=minimal /nologo /m
