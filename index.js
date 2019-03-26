@@ -97,7 +97,12 @@ function getNapiVersion() {
 
   // N-API 4
   // N-API 3
-  if (process.versions.napi) return process.versions.napi;
+  var napiVersion = process.versions.napi;
+  if (napiVersion != undefined) {
+    napiVersion = parseInt(napiVersion);
+    if (napiVersion <= 4) return napiVersion;
+    else return 4; // Future version, fallback to 4
+  }
 
   var version = /v(\d+)\.(\d+)\.(\d+)/.exec(process.version).map(function(s) {
     return parseInt(s);
