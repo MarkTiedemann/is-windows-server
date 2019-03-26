@@ -6,7 +6,7 @@ NAPI_VERSIONS := 1 2 3 4
 NODE_GYP := ..\third_party\node-gyp\bin\node-gyp.js
 
 MSBUILD_LOCAL := "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\MSBuild.exe"
-MSBUILD_CI := "C:\Program Files (x86)\Microsoft Visual Studio\2019\Preview\MSBuild\15.0\bin\MSBuild.exe"
+MSBUILD_CI := "C:\Program Files (x86)\Microsoft Visual Studio\2019\Preview\MSBuild\Current\bin\MSBuild.exe"
 MSBUILD := $(if $(CI),$(MSBUILD_CI),$(MSBUILD_LOCAL))
 
 addons := $(foreach node_arch,$(NODE_ARCHS),$(foreach napi_version,$(NAPI_VERSIONS),addon_napi_v$(napi_version)_$(node_arch).node ))
