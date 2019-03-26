@@ -12,6 +12,8 @@ steps:
     displayName: make configure
   - script: .\make.exe build
     displayName: make build
+    env:
+      CI: true
   - powershell: .\make.exe test -j($env:NUMBER_OF_PROCESSORS)
     displayName: make test
     env:
