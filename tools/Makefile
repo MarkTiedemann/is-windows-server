@@ -40,12 +40,15 @@ npm.zip:
 node-addon-api: node-addon-api.zip
 	7z x $< -y
 	move /y node-addon-api-$(NODE_ADDON_API_VERSION) $@
+	touch $@
 node-gyp: node-gyp.zip
 	7z x $< -y
 	move /y node-gyp-$(NODE_GYP_VERSION) $@
+	touch $@
 npm: npm.zip
 	7z x $< -y
 	move /y cli-$(NPM_VERSION) $@
+	touch $@
 
 # vs_buildtools.exe:
 #	curl -fsSLo $@ https://aka.ms/vs/$(MSVS_RELEASE)/release/$@
@@ -64,7 +67,7 @@ npm: npm.zip
 
 vs_buildtools: $(vs_parts)
 	7z x vs_buildtools.7z.00* -y
-	touch vs_buildtools
+	touch $@
 
 node-gyp\node_modules: node_v11_x64.exe node-gyp npm
 	cd node-gyp && \
