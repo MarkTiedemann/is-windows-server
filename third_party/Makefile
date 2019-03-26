@@ -1,4 +1,3 @@
-.PHONY: all clean
 SHELL := cmd.exe
 
 NODE_VERSIONS := 4 5 6 7 8 9 10 11
@@ -8,14 +7,12 @@ NODE_ADDON_API_VERSION := 1.6.2
 NODE_GYP_VERSION := 3.8.0
 NPM_VERSION := 6.9.0
 
-target_files := \
-	$(foreach version,$(NODE_VERSIONS),$(foreach arch,$(NODE_ARCHS),node_v$(version)_$(arch).exe )) \
-	node-addon-api.zip node-gyp.zip npm.zip
+node_binaries := $(foreach version,$(NODE_VERSIONS),$(foreach arch,$(NODE_ARCHS),node_v$(version)_$(arch).exe ))
+zip_files := node-addon-api.zip node-gyp.zip npm.zip
+target_dirs := node-addon-api node-gyp npm node-gyp\node_modules
 
-target_dirs := \
-	node-addon-api node-gyp npm node-gyp\node_modules
-
-all: $(target_files) $(target_dirs)
+.PHONY: all
+all: $(node_binaries) $(zip_files) $(target_dirs)
 
 define download_version_arch
 node_v$(1)_$(2).exe:
@@ -35,15 +32,15 @@ npm.zip:
 
 node-addon-api: node-addon-api.zip
 	7z x $< -y > nul
-	move /y node-addon-api-$(NODE_ADDON_API_VERSION) $@
+	move /y node-addon-api-$(NODE_ADDON_API_VERSION) $@ > nul
 	touch $@
 node-gyp: node-gyp.zip
 	7z x $< -y > nul
-	move /y node-gyp-$(NODE_GYP_VERSION) $@
+	move /y node-gyp-$(NODE_GYP_VERSION) $@ > nul
 	touch $@
 npm: npm.zip
 	7z x $< -y > nul
-	move /y cli-$(NPM_VERSION) $@
+	move /y cli-$(NPM_VERSION) $@ > nul
 	touch $@
 
 node-gyp\node_modules: node_v11_x64.exe node-gyp npm
@@ -51,6 +48,7 @@ node-gyp\node_modules: node_v11_x64.exe node-gyp npm
 	..\node_v11_x64.exe ..\npm\bin\npm-cli.js install --production --no-package-lock && \
 	touch node_modules
 
+.PHONY: clean
 clean:
-	@del /q /f $(target_files) 2> nul || true
+	@del /q /f $(node_binaries) $(zip_files) 2> nul || true
 	@rmdir /q /s $(target_dirs) 2> nul || true

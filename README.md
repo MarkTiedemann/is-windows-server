@@ -37,22 +37,22 @@ isServer; // => null
 
 ## Development
 
-**Download and install Visual Studio 2019 Build Tools:**
+**Required tools:**
 
-- https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16
-
-**Install other required build tools:**
+- [Visual Studio 2019 Build Tools](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16) (MSBuild Tools, C++ build tools)
+- [Scoop](https://scoop.sh/):
 
 ```powershell
-iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
 scoop bucket add versions
 scoop install make curl touch python27
 ```
 
-**Build, test, and clean the project:**
+**Available commands:**
 
 ```powershell
-make
+make install
+make configure
+make build
 make test
 make clean
 ```

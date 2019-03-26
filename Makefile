@@ -1,27 +1,40 @@
-.PHONY: all tools src test clean
 SHELL := cmd.exe
 
 NODE_VERSIONS := 4 5 6 7 8 9 10 11
 NODE_ARCHS := ia32 x64
 
-all: tools src
+tests := $(foreach version,$(NODE_VERSIONS),$(foreach arch,$(NODE_ARCHS),test_v$(version)_$(arch) ))
 
-tools:
-	@$(MAKE) -C $@ -j8
+ifeq ($(MAKECMDGOALS),)
+$(error No goal specified)
+endif
 
-src: tools
-	@$(MAKE) -C $@
+.PHONY: install
+install:
+	@$(MAKE) -C third_party -j$(NUMBER_OF_PROCESSORS)
+
+.PHONY:
+configure:
+	@$(MAKE) -C src configure
+
+.PHONY: build
+build:
+	@$(MAKE) -C src -j2
+
+.PHONY: test
+test: $(tests)
 
 define test_version_arch
-.\tools\node_v$(1)_$(2).exe test.js
-
+.PHONY: test_v$(1)_$(2)
+test_v$(1)_$(2):
+	.\third_party\node_v$(1)_$(2).exe test.js
 endef
 
-test: src
-	$(foreach version,$(NODE_VERSIONS),\
-	$(foreach arch,$(NODE_ARCHS),\
-	$(call test_version_arch,$(version),$(arch))))
+$(foreach version,$(NODE_VERSIONS),\
+$(foreach arch,$(NODE_ARCHS),\
+$(eval $(call test_version_arch,$(version),$(arch)))))
 
+.PHONY: clean
 clean:
-	@$(MAKE) -sC tools clean
+	@$(MAKE) -sC third_party clean
 	@$(MAKE) -sC src clean

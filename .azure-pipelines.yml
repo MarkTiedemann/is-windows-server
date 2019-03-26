@@ -6,12 +6,14 @@ steps:
     lfs: false
     fetchDepth: 1
     submodules: false
-  - script: make tools
-    displayName: Install build tools
-  - script: make src
-    displayName: Build addons
-  - script: make test
-    displayName: Run tests
+  - script: curl -fsSLO ftp://ftp.equation.com/make/64/make.exe && .\make.exe install
+    displayName: make install
+  - script: .\make.exe configure
+    displayName: make configure
+  - script: .\make.exe build
+    displayName: make build
+  - powershell: .\make.exe test -j($env:NUMBER_OF_PROCESSORS)
+    displayName: make test
     env:
       CI: true
       NODE_NO_WARNINGS: 1
