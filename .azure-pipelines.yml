@@ -6,7 +6,7 @@ steps:
     lfs: false
     fetchDepth: 1
     submodules: false
-  - script: curl -fsSLO ftp://ftp.equation.com/make/64/make.exe && .\make.exe install
+  - powershell: iwr ftp://ftp.equation.com/make/64/make.exe -out make.exe; .\make.exe install
     displayName: make install
   - script: .\make.exe configure
     displayName: make configure
