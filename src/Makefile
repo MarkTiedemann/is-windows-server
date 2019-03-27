@@ -5,8 +5,8 @@ NAPI_VERSIONS := 1 2 3 4
 
 NODE_GYP := ..\third_party\node-gyp\bin\node-gyp.js
 
-MSBUILD_LOCAL := "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\MSBuild.exe"
-MSBUILD_CI := "C:\Program Files (x86)\Microsoft Visual Studio\2019\Preview\MSBuild\Current\bin\MSBuild.exe"
+MSBUILD_LOCAL := "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin\MSBuild.exe"
+MSBUILD_CI := "C:\Program Files (x86)\Microsoft Visual Studio\2017\MSBuild\15.0\Bin\MSBuild.exe"
 MSBUILD := $(if $(CI),$(MSBUILD_CI),$(MSBUILD_LOCAL))
 
 addons := $(foreach node_arch,$(NODE_ARCHS),$(foreach napi_version,$(NAPI_VERSIONS),addon_napi_v$(napi_version)_$(node_arch).node ))
@@ -30,7 +30,7 @@ $(foreach arch,$(NODE_ARCHS),$(eval $(call configure_arch,$(arch))))
 
 define build_arch
 build_$(1)\Release\obj: build_$(1)\binding.sln addon.cc
-	$(MSBUILD) build_$(1)/binding.sln /p:Configuration=Release;Platform=$(if $(findstring ia32,$(1)),Win32,x64) /clp:Verbosity=minimal /nologo /m
+	$(MSBUILD) build_$(1)/binding.sln /p:"Configuration=Release;Platform=$(if $(findstring ia32,$(1)),Win32,x64);VCToolsInstallDir=$(VCToolsInstallDir)" /clp:Verbosity=minimal /nologo /m
 endef
 
 $(foreach arch,$(NODE_ARCHS),$(eval $(call build_arch,$(arch))))
